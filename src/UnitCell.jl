@@ -217,7 +217,9 @@ function solveLambda_aniso(unitcell::UnitCell{D}, beta::Float64) where D
     lower = lam_lb
     upper = Inf
     x0 = [lam_lb+10]
-    result = optimize(lam_sum_chi2, lower, upper, x0)
+    options = Optim.Options(iterations = 100, time_limit = 2.0)
+    #result = optimize(lam_sum_chi2, lower, upper, x0)
+    result = optimize(lam_sum_chi2, lower, upper, x0, Fminbox(LBFGS()), options)
     lambda = Optim.minimizer(result)[1]
 
     return lambda
